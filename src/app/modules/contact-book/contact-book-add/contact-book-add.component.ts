@@ -3,6 +3,9 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContactDataService } from '../../../service/contact-data.service';
 import { Book } from '../../../model/book.model';
+import { ToastrService } from 'ngx-toastr';
+import { ToastComponent } from '../../../shared/toast/toast.component';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-contact-book-add',
@@ -12,20 +15,11 @@ import { Book } from '../../../model/book.model';
 export class ContactBookAddComponent implements OnInit {
 
   @ViewChild('form') _slform: NgForm
-  item: Book
 
-  constructor(private _contactService: ContactDataService, private _router: Router) { }
+
+  constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit() {
-  }
-
-  onAdd(form: NgForm) {
-    const book = new Book(null, form.value.name);
-    this._contactService.addBook(book).subscribe(response => {
-      console.log(response);
-      this._contactService._updateBookList.next(true);
-      form.reset()
-    });
   }
 
   onClear() {

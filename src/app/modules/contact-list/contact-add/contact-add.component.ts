@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ContactDataService } from '../../../service/contact-data.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Contact } from '../../../model/contact.model';
+import { ToastComponent } from '../../../shared/toast/toast.component';
+import { ToastrService } from 'ngx-toastr';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-contact-add',
@@ -12,36 +15,20 @@ import { Contact } from '../../../model/contact.model';
 export class ContactAddComponent implements OnInit {
 
   @ViewChild('form') slform: NgForm
-  item: Contact
-  id;
+  @Input() id;
 
-  constructor(private _contactService: ContactDataService, private route: ActivatedRoute) {
-    this.route.parent.params.subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-      }
-    )
+  constructor(public activeModal: NgbActiveModal ) {
+
   }
 
   ngOnInit() {
 
   }
 
-  onAdd(form: NgForm) {
-    const contact = new Contact(null, form.value.name, this.id, form.value.email, form.value.number);
-    this._contactService.addContact(contact, this.id).subscribe(response => {
-      console.log(response);
-      this._contactService._updateContactList.next(true);
-      form.reset()
-    });
- 
-  }
+
 
   onClear() {
     this.slform.reset();
   }
 
-  onDelete() {
-    this.onClear();
-  }
 }

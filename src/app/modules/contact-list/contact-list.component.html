@@ -1,10 +1,21 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-5 card">
+    <div class="col-sm-10 card">
       <div class="card-body">
-        <h4 class="card-title"> Contact List</h4>
+        <div class=row>
+          <h4 class="col-sm-10 card-title"> Contacts</h4>
+          <div class="col-sm-2"> 
+            <button class="btn  btn-sm btn-success" (click)="addContact()">ADD</button>
+          </div>
+        </div>
         <table class="table table-hover">
           <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Contact Number</th>
+              <th></th>
+            </tr>
             <tr *ngFor="let contact of contacts ">
               <td>{{contact.name}}</td>
               <td>{{contact.email}}</td>
@@ -16,6 +27,7 @@
             </tr>
           </tbody>
         </table>
+        <div *ngIf="contacts && contacts.length==0">No Records Found!</div>
       </div>
       <hr>
       <ul class="nav nav-pills">
@@ -23,12 +35,6 @@
           <a class="nav-link " [routerLink]="" (click)="setPage(i,$event)" [ngClass]="{'active': i==page}">{{i}}</a>
         </li>
       </ul>
-    </div>
-    <div class="col-sm-5">
-      <a [routerLink]="['add']" routerLinkActive="active">
-        <h4 class="card-title">Add Contact</h4>
-      </a>
-      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

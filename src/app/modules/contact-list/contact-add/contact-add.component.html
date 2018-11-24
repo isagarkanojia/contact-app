@@ -1,26 +1,31 @@
-<div class="card">
-  <div class="card-body">
-    <form #form="ngForm" (ngSubmit)="onAdd(form)">
-      <div class="row">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" ngModel id="name" name="name" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" ngModel id="email" name="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="number">Number:</label>
-          <input type="number" ngModel id="number" name="number" class="form-control" required>
-        </div>
+<div class="modal-header">
+  <h4 class="modal-title">Contact</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #form="ngForm">
+    <div class="row">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" ngModel id="name" name="name" class="form-control" required>
       </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <button type="submit" class="btn btn-success btn-space" [disabled]="!form.valid">Add</button>
-          <button type="button" class="btn " (click)="onClear()">Clear</button>
-        </div>
+      &nbsp; &nbsp;
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" ngModel id="email" name="email" class="form-control" required>
       </div>
-    </form>
-  </div>
+      &nbsp; &nbsp;
+      <div class="form-group">
+        <label for="number">Contact Number:</label>
+        <input type="number" ngModel id="number" name="number" class="form-control" required>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-space btn-outline-success" (click)="activeModal.close(form)" [disabled]="!form.valid">Add</button>
+  <button type="button" class="btn btn-outline-inverse" (click)="onClear()">Clear</button>
+  <button type="button" class="btn btn-outline-danger" (click)="activeModal.close('Close')">Close</button>
 </div>
