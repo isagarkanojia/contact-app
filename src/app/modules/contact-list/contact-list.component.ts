@@ -12,38 +12,49 @@ export class ContactListComponent implements OnInit {
 
   id;
 
-  public page: number=0;
+  public page: number = 0;
 
   public contacts: Array<any>;
   public pages: Array<number>;
 
-  constructor(private route:ActivatedRoute,private router:Router,
-    private contactService:ContactDataService) { 
+  constructor(private route: ActivatedRoute, private router: Router,
+    private _contactService: ContactDataService) {
     this.route.params.subscribe(
-      (params:Params)=>{
-        this.id=+params['id'];
+      (params: Params) => {
+        this.id = +params['id'];
       }
     )
   }
 
   ngOnInit() {
     this.getContacts();
+    this._contactService._updateContactList.subscribe(event => {
+      this.getContacts();
+    })
   }
 
 
-  setPage(i, event:any){
+  setPage(i, event: any) {
     event.preventDefault();
-    this.page=i;
+    this.page = i;
     this.getContacts();
   }
 
 
-  getContacts(){
-    this.contactService.getContacts(this.id,this.page).subscribe(response =>{
-      this.contacts=response['content'];
-      this.pages=new Array(response['totalPages']);
+  getContacts() {
+    this._contactService.getContacts(this.id, this.page).subscribe(response => {
+      this.contacts = response['content'];
+      this.pages = new Array(response['totalPages']);
 
     });
   }
+
+  delete(event, contactId) {
+    this._contactService.deleteContact(this.id, contactId).subscribe(response => {
+      console.log(response);
+      this.getContacts();
+    });
+  }
+
 
 }

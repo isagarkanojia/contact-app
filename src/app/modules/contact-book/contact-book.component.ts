@@ -9,23 +9,33 @@ import { Book } from '../../model/book.model';
 })
 export class ContactBookComponent implements OnInit {
 
-  books :Book[];
+  books: Book[];
 
-  constructor(private contactDataService:ContactDataService,) { }
+  constructor(private _contactDataService: ContactDataService, ) { }
   ngOnInit() {
+    this.getContactBooks();
+    this._contactDataService._updateBookList.subscribe(event=>{
       this.getContactBooks();
-   
+    })
+
   }
   getContactBooks() {
-    this.contactDataService.getContactBooks().subscribe(
+    this._contactDataService.getContactBooks().subscribe(
       (response) => {
         if (response['success']) {
-          this.books=response['data'];
+          this.books = response['data'];
         } else {
         }
       }, (error) => {
       });
   }
 
+
+  deleteBook(id) {
+    this._contactDataService.deleteBook(id).subscribe(response => {
+      console.log(response);
+      this.getContactBooks();
+    });
+  }
 
 }

@@ -6,7 +6,7 @@
         <ul class="list-group">
             <app-contact-book-item 
             class="list-group-item"
-            *ngFor="let book of books; let i=index" [book]="book"></app-contact-book-item>
+            *ngFor="let book of books; let i=index" [book]="book"  (onDelete)="deleteBook(book.id)" ></app-contact-book-item>
         </ul>
       </div>
     </div>

@@ -15,7 +15,7 @@ export class ContactAddComponent implements OnInit {
   item: Contact
   id;
 
-  constructor(private contactService: ContactDataService, private router: Router, private route: ActivatedRoute) {
+  constructor(private _contactService: ContactDataService, private route: ActivatedRoute) {
     this.route.parent.params.subscribe(
       (params: Params) => {
         this.id = +params['id'];
@@ -29,11 +29,12 @@ export class ContactAddComponent implements OnInit {
 
   onAdd(form: NgForm) {
     const contact = new Contact(null, form.value.name, this.id, form.value.email, form.value.number);
-    this.contactService.addContact(contact,this.id).subscribe(response => {
+    this._contactService.addContact(contact, this.id).subscribe(response => {
       console.log(response);
+      this._contactService._updateContactList.next(true);
+      form.reset()
     });
-    form.reset()
-    this.router.navigateByUrl("/app/books");
+ 
   }
 
   onClear() {

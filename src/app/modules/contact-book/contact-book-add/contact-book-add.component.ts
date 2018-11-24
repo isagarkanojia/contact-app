@@ -11,30 +11,24 @@ import { Book } from '../../../model/book.model';
 })
 export class ContactBookAddComponent implements OnInit {
 
-  @ViewChild('form') slform: NgForm
+  @ViewChild('form') _slform: NgForm
   item: Book
 
-  constructor(private contactService: ContactDataService, private router:Router) { }
+  constructor(private _contactService: ContactDataService, private _router: Router) { }
 
   ngOnInit() {
   }
 
   onAdd(form: NgForm) {
-    const book = new Book(null,form.value.name);
-    this.contactService.addBook(book).subscribe(response => {
+    const book = new Book(null, form.value.name);
+    this._contactService.addBook(book).subscribe(response => {
       console.log(response);
+      this._contactService._updateBookList.next(true);
+      form.reset()
     });
-    form.reset()
-    this.router.navigateByUrl("/app/books");
   }
 
   onClear() {
-    this.slform.reset();
+    this._slform.reset();
   }
-
-  onDelete() {
-    this.onClear();
-  }
-
-
 }
