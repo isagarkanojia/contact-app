@@ -1,0 +1,17 @@
+<nav id="sidebar">
+        <div class="sidebar-header">
+            <img class="" src="../../../assets/img/logo/logo.png">
+        </div>
+        <!-- sidebar content -->
+        <div>
+            <ul class="list-unstyled" style="text-align: center;margin-top: 20px;">
+                <li>
+                    <div [routerLink]="['../app/books']" aria-expanded="false" (click)="onLinkClick('dashboard')"
+                        routerLinkActive="menu-active" class="container" [routerLinkActiveOptions]="{exact:true}">
+                        <div class="far fa-chart-pie" style="font-size: 25px; width: 100%"></div>
+                        <div class="sidebar-content-heading">Contact Books</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>

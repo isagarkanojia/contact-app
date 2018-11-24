@@ -1,0 +1,39 @@
+<div class="page-center bg" id="login-container">
+    <div class="page-center-in">
+        <div class="container-fluid">
+            <form class="sign-in-box" #form="ngForm" novalidate>
+                <div id="sign-in-logo">
+                    <div class="logo">
+                        Contact App 1.0
+                    </div>
+                </div>
+                <div class="signin-form">
+                    <div class="form-group" style="padding-top: 5px">
+                        <span class="fas fa-user-circle"></span>
+                        <input type="text" class="form-control username" placeholder="Username" #username="ngModel"
+                            name="username" required maxlength="25" [(ngModel)]="login.username" style="background-color: #edeff0 !important" />
+                        <small class="text-muted error-message" [style.visibility]="username?.errors?.required && username.dirty ? 'visible' : 'hidden'">Username
+                            must not be empty</small>
+                    </div>
+                    <div class="form-group">
+                        <span class="fas fa-lock"> </span>
+                        <input type="password" class="form-control password" placeholder="Password" #password="ngModel"
+                            name="password" required maxlength="25" [(ngModel)]="login.password" style="background-color: #edeff0 !important" />
+                        <small class="text-muted error-message" [style.visibility]="password?.errors?.required && password.dirty ? 'visible' : 'hidden'">Password
+                            must not be empty</small>
+                    </div>
+                    <header class="sign-in-title error-message" *ngIf="showErrorMessage">Login Failed</header>
+                    <button id="btn-submit" type="submit" (click)="onLoginFormSubmit(form)" class="btn btn-rounded">SIGN
+                        IN</button>
+
+                    <div class="row" style="margin-top: 25px;">
+                    </div>
+                    <div id="login-logo">
+                        <div class='line-icon'>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-5 card">
+      <div class="card-body">
+        <h4 class="card-title"> Contact Book List</h4>
+        <ul class="list-group">
+            <app-contact-book-item 
+            class="list-group-item"
+            *ngFor="let book of books; let i=index" [book]="book"></app-contact-book-item>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <a [routerLink]="['add']" routerLinkActive="active">
+         <h4 class="card-title">Add Book</h4>
+      </a>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
