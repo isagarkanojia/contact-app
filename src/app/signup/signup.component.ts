@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
-// import { ToastrService } from 'ngx-toastr';
-// import { AuthStatus } from '.';
+
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeResourceUrl, } from '@angular/platform-browser';
 import { LoginRequest } from '../model/login-request.model';
@@ -80,65 +79,5 @@ export class SignUpComponent implements OnInit {
       this._authService.signup(signupRequest);
   }
 
-  // doAuthentication(loginRequest: LoginRequest): void {
-  //     this.spinnyService.start();
-  //     this._authenticatedUserSubs = this._authService.authenticate(loginRequest).subscribe(
-  //         (data: any) => {
-  //             this.spinnyService.stop();
-  //             this._authStatus = data.statusCode ? AuthStatus.SUCCESS : AuthStatus.FAILED;
-  //             if (this._authStatus === AuthStatus.SUCCESS) {
-  //                 const userData = data['data'];
-  //                 if (!userData) {
-  //                     StorageUtil.clearAll();
-  //                     this._toastr.show(' You do not have permission to access any customer !! ', 'Error!', {
-  //                         toastComponent: ToastComponent,
-  //                         toastClass: 'error-toast-class',
-  //                         disableTimeOut: true,
-  //                         positionClass: 'toast-top-center'
-  //                     });
-  //                 } else {
-
-  //                     StorageUtil.setSessionKey(data['data']['accessToken']);
-  //                     this._router.navigateByUrl('/smartagro/dashboard');
-  //                     this._toastr.clear();
-  //                 }
-
-
-
-  //             } else {
-  //                 this._toastr.show('Error Occurred: ' + data.error.error, 'Error!', {
-  //                     toastComponent: ToastComponent,
-  //                     toastClass: 'error-toast-class',
-  //                     // timeOut: 2000,
-  //                     disableTimeOut: true,
-  //                     positionClass: 'toast-top-center'
-  //                 });
-  //             }
-  //         },
-  //         (ex: Exception) => {
-  //             var body = JSON.parse(ex['_body']);
-  //             this.spinnyService.stop();
-  //             this._toastr.show('Error Occurred:' + body.message, 'Error!', {
-  //                 toastComponent: ToastComponent,
-  //                 toastClass: 'error-toast-class',
-  //                 // timeOut: 2000,
-  //                 disableTimeOut: true,
-  //                 positionClass: 'toast-top-center'
-  //             });
-  //             if (ex === ExceptionRegistry.UNAUTH_ACC_DENIED) {
-  //                 this._authStatus = AuthStatus.FAILED;
-  //                 console.log({ type: 'ERROR', message: ex.message });
-  //             }
-  //         }
-  //     );
-  // }
-
-  rememberMe() {
-
-  }
-
-  forgotPassword() {
-
-  }
 
 }
