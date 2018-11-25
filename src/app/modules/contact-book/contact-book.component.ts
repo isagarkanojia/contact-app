@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ContactBookAddComponent } from './contact-book-add/contact-book-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
+import { SpinnyService } from '../../shared/spinny/spinny.service';
 
 @Component({
   selector: 'app-contact-book',
@@ -17,7 +18,7 @@ export class ContactBookComponent implements OnInit {
   books: Book[];
 
   constructor(private _contactService: ContactDataService,
-    private _toastr: ToastrService,
+    private _toastr: ToastrService, private _spinnyService: SpinnyService,
     private _modalService: NgbModal) { }
   ngOnInit() {
     this.getContactBooks();
@@ -27,21 +28,26 @@ export class ContactBookComponent implements OnInit {
 
   }
   getContactBooks() {
+    this._spinnyService.start();
     this._contactService.getContactBooks().subscribe(
       (response) => {
         if (response['success']) {
           this.books = response['data'];
         } else {
         }
+
+        this._spinnyService.stop();
       }, (error) => {
       });
   }
 
 
   deleteBook(id) {
+    this._spinnyService.start();
     this._contactService.deleteBook(id).subscribe(response => {
 
       if (response['success']) {
+        this._spinnyService.stop();
         this._toastr.show('Contact Book deleted successfully', 'Success', {
           toastComponent: ToastComponent,
           toastClass: 'success-toast-class',
@@ -67,6 +73,7 @@ export class ContactBookComponent implements OnInit {
   }
 
   saveBook(form: NgForm) {
+    this._spinnyService.start();
     const book = new Book(null, form.value.name);
     this._contactService.addBook(book).subscribe(response => {
       if (response['success']) {
@@ -89,6 +96,7 @@ export class ContactBookComponent implements OnInit {
       }
       this._contactService._updateBookList.next(true);
       form.reset()
+      this._spinnyService.stop();
     });
   }
 }

@@ -8,6 +8,7 @@ import { ContactAddComponent } from './contact-add/contact-add.component';
 import { NgForm } from '@angular/forms';
 import { Contact } from '../../model/contact.model';
 import { NgModuleRef } from '@angular/core/src/render3';
+import { SpinnyService } from '../../shared/spinny/spinny.service';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class ContactListComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router,
     private _contactService: ContactDataService,
     private _toastr: ToastrService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal, private _spinnyService: SpinnyService,
   ) {
     this.route.params.subscribe(
       (params: Params) => {
@@ -44,13 +45,17 @@ export class ContactListComponent implements OnInit {
 
 
   getContacts() {
+    this._spinnyService.start();
     this._contactService.getContacts(this.id, this.page).subscribe(response => {
       this.contacts = response['content'];
       this.totalPages = response['totalPages'];
-    });
+      this._spinnyService.stop();
+    }
+    );
   }
 
   delete(event, contactId) {
+    this._spinnyService.start();
     this._contactService.deleteContact(this.id, contactId).subscribe(response => {
       if (response['success']) {
         this._toastr.show('Contact deleted successfully', 'Success', {
@@ -59,6 +64,7 @@ export class ContactListComponent implements OnInit {
           timeOut: 2000,
           positionClass: 'toast-top-center'
         });
+        this._spinnyService.stop();
       }
       this.getContacts();
     });
@@ -78,6 +84,7 @@ export class ContactListComponent implements OnInit {
   }
 
   saveContact(form: NgForm) {
+    this._spinnyService.start();
     const contact = new Contact(null, form.value.name, this.id, form.value.email, form.value.number);
     this._contactService.addContact(contact, this.id).subscribe(response => {
       if (response['success']) {
@@ -100,14 +107,13 @@ export class ContactListComponent implements OnInit {
       }
       this._contactService._updateContactList.next(true);
       form.reset()
+      this._spinnyService.stop();
     });
 
   }
 
 
   edit(event, contact) {
-    console.log(contact);
-
     const modalRef = this._modalService.open(ContactAddComponent)
     modalRef.componentInstance.id = this.id;
     modalRef.componentInstance.contact = contact;
@@ -159,16 +165,20 @@ export class ContactListComponent implements OnInit {
   }
 
   getContactsBySearch(search) {
+    this._spinnyService.start();
     if (search && search != '') {
       this.page = 0;
       this._contactService.getContactsBySearch(this.id, this.page, search).subscribe(response => {
         this.contacts = response['content'];
         this.totalPages = response['totalPages'];
+        this._spinnyService.stop();
       });
     } else {
       this.getContacts();
+     
     }
-
+    
+    
   }
 
 }
