@@ -21,6 +21,7 @@ export class ContactListComponent implements OnInit {
   page = 0;
   contacts: Array<any>;
   totalPages;
+  searchText;
 
   constructor(private route: ActivatedRoute, private router: Router,
     private _contactService: ContactDataService,
@@ -152,4 +153,16 @@ export class ContactListComponent implements OnInit {
       this.getContacts();
     }
   }
+
+  onSearchChange(event){
+   this.getContactsBySearch(event);
+  }
+
+  getContactsBySearch(search) {
+    this._contactService.getContactsBySearch(this.id, this.page,search).subscribe(response => {
+      this.contacts = response['content'];
+      this.totalPages = response['totalPages'];
+    });
+  }
+
 }

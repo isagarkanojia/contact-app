@@ -69,9 +69,17 @@ export class ContactDataService {
     }
 
 
-    public updateContact(contact, bookId){
-        const url = API_BASE + '/book/' + bookId + '/contact/'+contact.id;
+    public updateContact(contact, bookId) {
+        const url = API_BASE + '/book/' + bookId + '/contact/' + contact.id;
         return this._secureHttp.put(url, contact)
+            .map((response: Response) => HttpUtil.extractData<any>(response))
+            .finally(() => {
+            });
+    }
+
+    public getContactsBySearch(bookId: number, page: number, search): Observable<any> {
+        const url = API_BASE + '/book/' + bookId + '/contactsPage/' + search + '?page=' + page;
+        return this._secureHttp.get(url)
             .map((response: Response) => HttpUtil.extractData<any>(response))
             .finally(() => {
             });
