@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class=row>
           <h4 class="col-sm-10 card-title"> Contacts</h4>
-          <div class="col-sm-2"> 
+          <div class="col-sm-2">
             <button class="btn  btn-sm btn-success" (click)="addContact()">ADD</button>
           </div>
         </div>
@@ -20,10 +20,12 @@
               <td>{{contact.name}}</td>
               <td>{{contact.email}}</td>
               <td>{{contact.number}}</td>
+              <td><button type="button" (click)="edit($event,contact)" class="close" aria-label="Close">
+                  <i class="fa fa-edit" style="font-size:18px" ></i>
+              </button></td>
               <td><button type="button" (click)="delete($event,contact.id)" class="close" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button></td>
-
             </tr>
           </tbody>
         </table>
@@ -31,10 +33,114 @@
       </div>
       <hr>
       <ul class="nav nav-pills">
-        <li class="nav-item" *ngFor="let p of pages; let i=index">
-          <a class="nav-link " [routerLink]="" (click)="setPage(i,$event)" [ngClass]="{'active': i==page}">{{i}}</a>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="{disabled:page === 0}" [routerLink]="" (click)="setPage(0,$event)">First</a>
+        </li>
+        <li class="nav-item">
+          <a  class="nav-link" [ngClass]="{disabled:page === 0}" [routerLink]="" (click)="setPage(page - 1,$event)">Previous</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{disabled:0 == 0}" >{{page+1}}/{{totalPages}}</a>
+          </li>
+        <li class="nav-item">
+          <a [ngClass]="{disabled:page === totalPages-1}" class="nav-link" [routerLink]="" (click)="setPage(page + 1,$event)">Next</a>
+        </li>
+        <li class="nav-item">
+          <a [ngClass]="{disabled:page === totalPages-1}" class="nav-link" [routerLink]="" (click)="setPage(totalPages-1,$event)">Last</a>
         </li>
       </ul>
     </div>
   </div>
 </div>
+
+<ng-template #tmplAddCustomLineItem let-c="close">
+    <div class="modal-header">
+        <h5 class="modal-title">{{modelMode}} Custom Line Item</h5>
+        <button type="button" class="close" aria-label="Close" (click)="c('CLOSE')">
+            <i class="far fa-times-circle"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        	<form #f="ngForm" novalidate>
+
+        <div class="form-group">
+            <label class="required">Description:</label>
+            <input type="text" name="new-custom-line-item-description" id="new-custom-line-item-description" class="form-control" [(ngModel)]="newCustomLineItem.lineItemDescription"
+             />
+        </div>
+        <div class="form-group" *ngIf='usePOCategory'>
+            <label class="required" for="new-custom-line-item-component">PO Category:</label>
+            <select [disabled]="userHasRole(1) || null" name="new-custom-line-item-component" id="new-custom-line-item-component" class="form-control"
+                [(ngModel)]="newCustomLineItem.poCategoryId">
+                <option value="0">-- Choose a PO Category --</option>
+                <option [ngValue]="category.id" *ngFor="let category of poCategories">{{category.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="required" for="new-custom-line-item-component">Service Type:</label>
+            <select [disabled]="userHasRole(1) || null" name="new-custom-line-item-component" id="new-custom-line-item-component" class="form-control"
+                [(ngModel)]="newCustomLineItem.componentId">
+                <option value="0">-- Choose a Service --</option>
+                <option [ngValue]="component.id" *ngFor="let component of components">{{component.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="required" for="new-custom-line-item-category">Service:</label>
+            <select [disabled]="userHasRole(1) || null" name="new-custom-line-item-category" id="new-custom-line-item-category" class="form-control"
+                [(ngModel)]="newCustomLineItem.categoryId">
+                <option value="0">-- Choose a Service --</option>
+                <option [ngValue]="category.id" *ngFor="let category of categories">{{category.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="new-custom-line-item-level">Level:</label>
+            <select [disabled]="userHasRole(1) || null" name="new-custom-line-item-level" id="new-custom-line-item-level" class="form-control"
+                [(ngModel)]="newCustomLineItem.levelId">
+                <option value="0">-- Choose a Level --</option>
+                <option [ngValue]="lev.id" *ngFor="let lev of levels">{{lev.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="new-custom-line-item-revenuType" class="required">Revenue Type:</label>
+            <select [disabled]="userHasRole(1) || null" name="new-custom-line-item-revenuType" id="new-custom-line-item-revenuType" class="form-control"
+                [(ngModel)]="newCustomLineItem.revenueTypeId" required>
+                <option value="0">-- Choose a Revenue Type --</option>
+                <option [ngValue]="rev.id" *ngFor="let rev of revenueTypes">{{rev.name}}</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-6" style="padding-left: 0;padding-right: 15px;">
+                <label class="required" for="new-custom-line-item-unit-price">
+                    Unit Price:
+                </label>
+                <input appNumberInputMask [disabled]="userHasRole(1) || null" type="number" min="0" name="new-custom-line-item-unit-price"
+                    id="new-custom-line-item-unit-price" class="form-control" [(ngModel)]="newCustomLineItem.unitPrice" required/>
+            </div>
+            <div class="col-lg-6" style="padding-right: 0;padding-left: 15px;">
+                <label for="" class="required">
+                    Unit Type
+                </label>
+                <select name="unitType-list" id="unitType-list" class="form-control" [(ngModel)]="newCustomLineItem.unitTypeId">
+                    <option value="0">---Select Unit Type---</option>
+                    <option [value]="unitType.id" *ngFor="let unitType of unitTypes">{{unitType.name}}</option>
+                </select>
+            </div>
+        </div>
+        </form>
+        
+    </div>
+    <div class="modal-footer" style="background: #eeeeee;">
+        <button (click)="c('OK')" [disabled]=" !f.valid ||( usePOCategory && newCustomLineItem.poCategoryId == 0 )|| 
+             newCustomLineItem.unitTypeId == 0 || newCustomLineItem.revenueTypeId == 0 || 
+            newCustomLineItem.lineItemDescription.trim() == '' || newCustomLineItem.categoryId == 0 || newCustomLineItem.componentId == 0" class="
+            btn btn-primary">
+            Save
+        </button>
+        <button (click)="c('CLOSE')" class="btn btn-secondary">
+            Cancel
+        </button>
+        <span style="margin-left: auto;">
+            <span style="color: red;">*</span> Required
+        </span>
+    </div>
+</ng-template>

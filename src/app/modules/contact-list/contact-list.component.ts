@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContactAddComponent } from './contact-add/contact-add.component';
 import { NgForm } from '@angular/forms';
 import { Contact } from '../../model/contact.model';
+import { NgModuleRef } from '@angular/core/src/render3';
 
 
 @Component({
@@ -17,9 +18,9 @@ import { Contact } from '../../model/contact.model';
 export class ContactListComponent implements OnInit {
 
   id;
-  page: number = 0;
+  page = 0;
   contacts: Array<any>;
-  pages: Array<number>;
+  totalPages;
 
   constructor(private route: ActivatedRoute, private router: Router,
     private _contactService: ContactDataService,
@@ -41,18 +42,10 @@ export class ContactListComponent implements OnInit {
   }
 
 
-  setPage(i, event: any) {
-    event.preventDefault();
-    this.page = i;
-    this.getContacts();
-  }
-
-
   getContacts() {
     this._contactService.getContacts(this.id, this.page).subscribe(response => {
       this.contacts = response['content'];
-      this.pages = new Array(response['totalPages']);
-
+      this.totalPages = response['totalPages'];
     });
   }
 
@@ -96,7 +89,7 @@ export class ContactListComponent implements OnInit {
           positionClass: 'toast-top-center'
         });
       } else {
-        let error = response['error']['message'] ?  response['error']['message']:'Error Occured!'
+        let error = response['error']['message'] ? response['error']['message'] : 'Error Occured!'
         this._toastr.show(error, 'Error', {
           toastComponent: ToastComponent,
           toastClass: 'error-toast-class',
@@ -110,4 +103,53 @@ export class ContactListComponent implements OnInit {
 
   }
 
+
+  edit(event, contact){
+    console.log(contact);
+
+    const modalRef = this._modalService.open(ContactAddComponent)
+    modalRef.componentInstance.id = this.id;
+    modalRef.componentInstance.contact=contact;
+    modalRef.componentInstance.editMode=true;
+    modalRef.result.then(response => {
+      if (response === 'Close') {
+        modalRef.close();
+      } else {
+        this.saveContact(response);
+      }
+    })
+
+    // // const contact = new Contact(null, form.value.name, this.id, form.value.email, form.value.number);
+    // this._contactService.updateContact(contact, this.id).subscribe(response => {
+    //   if (response['success']) {
+    //     this._contactService._updateBookList.next(true);
+    //     this._toastr.show('Contact Book updated successfully', 'Success', {
+    //       toastComponent: ToastComponent,
+    //       toastClass: 'success-toast-class',
+    //       timeOut: 2000,
+    //       positionClass: 'toast-top-center'
+    //     });
+    //   } else {
+    //     let error = response['error']['message'] ? response['error']['message'] : 'Error Occured!'
+    //     this._toastr.show(error, 'Error', {
+    //       toastComponent: ToastComponent,
+    //       toastClass: 'error-toast-class',
+    //       disableTimeOut: true,
+    //       positionClass: 'toast-top-center'
+    //     });
+    //   }
+    //   this._contactService._updateContactList.next(true);
+    // });
+
+  }
+
+
+  setPage(page: number, event: any) {
+    event.preventDefault();
+    if( page >= 0 && (page < this.totalPages) ){
+      console.log(page);
+      this.page = page;
+      this.getContacts();
+    }
+  }
 }

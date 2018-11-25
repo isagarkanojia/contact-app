@@ -69,4 +69,12 @@ export class ContactDataService {
     }
 
 
+    public updateContact(contact, bookId){
+        const url = API_BASE + '/book/' + bookId + '/contact/'+contact.id;
+        return this._secureHttp.put(url, contact)
+            .map((response: Response) => HttpUtil.extractData<any>(response))
+            .finally(() => {
+            });
+    }
+
 }
