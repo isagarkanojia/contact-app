@@ -5,7 +5,7 @@
         <div class=row>
           <h4 class="col-sm-5 card-title"> Contacts</h4> 
           <div class="col-sm-5">
-            <input style="padding: 0.2rem .75rem" type="text" class="form-control col-md-12" (ngModelChange)="onSearchChange($event)" placeholder="Search Contacts..." > 
+            <input style="padding: 0.2rem .75rem" type="text" class="form-control col-md-12" ngModel (ngModelChange)="onSearchChange($event)" placeholder="Search Contacts..." > 
           </div>
           <div class="col-sm-2">
             <button class="btn  btn-sm btn-success" (click)="addContact()">ADD</button>

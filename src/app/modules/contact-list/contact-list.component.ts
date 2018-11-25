@@ -105,13 +105,13 @@ export class ContactListComponent implements OnInit {
   }
 
 
-  edit(event, contact){
+  edit(event, contact) {
     console.log(contact);
 
     const modalRef = this._modalService.open(ContactAddComponent)
     modalRef.componentInstance.id = this.id;
-    modalRef.componentInstance.contact=contact;
-    modalRef.componentInstance.editMode=true;
+    modalRef.componentInstance.contact = contact;
+    modalRef.componentInstance.editMode = true;
     modalRef.result.then(response => {
       if (response === 'Close') {
         modalRef.close();
@@ -147,22 +147,28 @@ export class ContactListComponent implements OnInit {
 
   setPage(page: number, event: any) {
     event.preventDefault();
-    if( page >= 0 && (page < this.totalPages) ){
+    if (page >= 0 && (page < this.totalPages)) {
       console.log(page);
       this.page = page;
       this.getContacts();
     }
   }
 
-  onSearchChange(event){
-   this.getContactsBySearch(event);
+  onSearchChange(event) {
+    this.getContactsBySearch(event);
   }
 
   getContactsBySearch(search) {
-    this._contactService.getContactsBySearch(this.id, this.page,search).subscribe(response => {
-      this.contacts = response['content'];
-      this.totalPages = response['totalPages'];
-    });
+    if (search && search != '') {
+      this.page = 0;
+      this._contactService.getContactsBySearch(this.id, this.page, search).subscribe(response => {
+        this.contacts = response['content'];
+        this.totalPages = response['totalPages'];
+      });
+    } else {
+      this.getContacts();
+    }
+
   }
 
 }
