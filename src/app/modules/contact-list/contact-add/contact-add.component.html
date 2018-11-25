@@ -25,7 +25,8 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-space btn-outline-success" (click)="activeModal.close(form)" [disabled]="!form.valid">Add</button>
+  <button type="submit" class="btn btn-space btn-outline-success" (click)="activeModal.close(form)" 
+  [disabled]="!validEmail(form.value.email) || !validNumber(form.value.number) || !form.valid">Add</button>
   <button type="button" class="btn btn-outline-inverse" (click)="onClear()">Clear</button>
   <button type="button" class="btn btn-outline-danger" (click)="activeModal.close('Close')">Close</button>
 </div>

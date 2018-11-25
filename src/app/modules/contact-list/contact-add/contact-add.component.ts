@@ -25,6 +25,14 @@ export class ContactAddComponent implements OnInit {
 
   }
 
+  public validNumber(number) : boolean {
+    return /^\d{10}$/.test(number);
+  }
+
+  public validEmail(email) : boolean {
+    let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    return reg.test(email);
+  }
 
 
   onClear() {
